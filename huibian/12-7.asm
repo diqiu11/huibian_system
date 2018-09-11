@@ -1,7 +1,6 @@
-assume cs:code,ds:datesg
-datesg segment
-		db 'overflow!'
-datesg ends
+assume cs:code
+
+
 code segment
 start:	mov ax,0
 		mov es,ax
@@ -19,13 +18,16 @@ start:	mov ax,0
 		mov ax,4c00h
 		int 21h
 
-
-do0:	mov ax,0b800h
+do0:	jmp short do0start		//防止除法溢出
+		db 'overflow!'
+		
+do0start:	
+		mov ax,0b800h
 		mov es,ax
 		mov di,12*160+36*2		//中间位置
-		mov ax,datesg
+		mov ax,cs
 		mov ds,ax
-		mov si,0
+		mov si,202h		//?
 		mov cx,9
 	s:	mov al,[si]
 		mov es:[di],al
